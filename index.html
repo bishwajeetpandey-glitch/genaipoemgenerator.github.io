@@ -1,0 +1,69 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MasterCef: Recipe Generator</title>
+    <link rel="stylesheet" href="app.css">
+</head>
+
+<body>
+    <h1 style="margin-bottom: 0;">Google Generative AI - Recipe Generator</h1>
+    <p style="margin-top: 0;">Generate Recipe from Google Gemini</p>
+    <input type="text" id="topic" placeholder="Enter Dishes">
+    <button id="generateBtn">Generate</button>
+    <p id="loader" style="display: none;">Loading...</p>
+    
+    <div class="res" id="response" style="display: none;">
+      <h3 style="margin: 0;">Result:</h3>
+      <div id="output"></div>
+    </div>
+
+    <script type="importmap">
+        {
+          "imports": {
+            "@google/generative-ai": "https://esm.run/@google/generative-ai"
+          }
+        }
+    </script>
+
+    <script type="module">
+        document.getElementById('loader').style.display = 'none';
+        document.getElementById('response').style.display = 'none';
+
+        import { GoogleGenerativeAI } from "@google/generative-ai";
+
+        async function run() {
+            document.getElementById("output").innerHTML = '';
+            document.getElementById('loader').style.display = 'block';
+            document.getElementById('response').style.display = 'none';
+
+            const topic = document.getElementById("topic").value;
+            const prompt = `Create a Recipe on ${topic}.`;
+
+            // Fetch the API key securely from the server
+            const response = await fetch('api/request_handler.php');
+            const data = await response.json();
+            const API_KEY = data.apiKey;
+
+            // Initialize Google Generative AI with the API key
+        
+            const genAI = new GoogleGenerativeAI(API_KEY);
+            const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
+
+            try {
+                const result = await model.generateContent(prompt);
+                const text = await result.response.text();
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('response').style.display = 'block';
+                document.getElementById("output").innerHTML = text;
+            } catch (error) {
+                document.getElementById('loader').style.display = 'none';
+                alert('Error generating Recipe. Please try again.');
+                console.error(error);
+            }
+        }
+
+        document.getElementById("generateBtn").addEventListener("click", run);
+    </script>
+</body>
+</html>
