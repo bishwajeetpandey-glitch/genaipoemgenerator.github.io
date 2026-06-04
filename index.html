@@ -2,14 +2,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MasterCef: Recipe Generator</title>
+    <title>AIKavi: Poem Generator</title>
     <link rel="stylesheet" href="app.css">
 </head>
 
 <body>
-    <h1 style="margin-bottom: 0;">Google Generative AI - Recipe Generator</h1>
-    <p style="margin-top: 0;">Generate Recipe from Google Gemini</p>
-    <input type="text" id="topic" placeholder="Enter Dishes">
+    <h1 style="margin-bottom: 0;">Google Generative AI - Poem Generator</h1>
+    <p style="margin-top: 0;">Generate Poem from Google Gemini</p>
+    <input type="text" id="topic" placeholder="Enter Topic">
     <button id="generateBtn">Generate</button>
     <p id="loader" style="display: none;">Loading...</p>
     
@@ -38,10 +38,10 @@
             document.getElementById('response').style.display = 'none';
 
             const topic = document.getElementById("topic").value;
-            const prompt = `Create a Recipe on ${topic}.`;
+            const prompt = `Create a Poem on ${topic}.`;
 
             // Fetch the API key securely from the server
-            const response = await fetch('api/request_handler.php');
+            const response = await fetch('request_handler.php');
             const data = await response.json();
             const API_KEY = data.apiKey;
 
@@ -58,7 +58,7 @@
                 document.getElementById("output").innerHTML = text;
             } catch (error) {
                 document.getElementById('loader').style.display = 'none';
-                alert('Error generating Recipe. Please try again.');
+                alert('Error generating Poem. Please try again.');
                 console.error(error);
             }
         }
